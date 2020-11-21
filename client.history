@@ -1,0 +1,61 @@
+    1  vi /etc/hosts
+    2  curl simple.example.com
+    3  curl simple.example.com:18080
+    4  curl port.example.com:90
+    5  curl-l  https://ssl.example.com
+    6  curl -k  https://ssl.example.com
+    7  vi /etc/fstab
+    8  rm -rvf /etc/.fstab.swp 
+    9  vi /etc/fstab
+   10  mkdir /nfs-client 
+   11  mount -a
+   12  yum install nfs-utils -y
+   13  systemctl start nfs-utils 
+   14  systemctl enable nfs-utils 
+   15  mount -a
+   16  df -hT
+   17  cd /nfs-client/
+   18  ls
+   19  mkdir data
+   20  ls
+   21  cd
+   22  vi /etc/fstab
+   23  mkdir /samba-client
+   24  vi pas
+   25  vi pass
+   26  yum install samba-client cifs-utils -y
+   27  mount -a
+   28  man mount.cifs
+   29  !
+   30  vi /etc/fstab
+   31  mount -a
+   32  df -hT
+   33  cd /samba-client 
+   34  ls
+   35  mkdir data
+   36  ls
+   37  cd
+   38  su - abhi
+   39  yum whatprovides iscsiadm
+   40  yum install iscsi-initiator-utils-6.2.0.874-19.el7.x86_64 -y
+   41  vi /etc/iscsi/initiatorname.iscsi 
+   42  man iscsiadm
+   43  iscsiadm --mode discoverydb --type sendtargets --portal 192.168.1.10 --discover
+   44  iscsiadm --mode discoverydb --type sendtargets --portal 192.168.46.142 --discover
+   45  systemctl restart iscsid
+   46  iscsiadm --mode discoverydb --type sendtargets --portal 192.168.46.142 --discover
+   47  man iscsiadm
+   48  iscsiadm --mode node --targetname iqn.2001-05.com.doe:test --portal 192.168.1.1:3260 --login
+   49  iscsiadm --mode node --targetname iqn.2020-01.example.com --portal 192.168.46.142:3260 --login
+   50  df -hT
+   51  lsblk
+   52  fdisk /dev/sdc
+   53  partprobe
+   54  lsbllk
+   55  lsblk
+   56  mkfs.ext4 /dev/sdc1 
+   57  mkdir /iscsi-client
+   58  vi /etc/fstab
+   59  mount -a
+   60  df -hT
+   61  history > client.history

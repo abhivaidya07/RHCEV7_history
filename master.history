@@ -1,0 +1,151 @@
+    1  history
+    2  yum install httpd -y
+    3  vi /var/www/html/index.html 
+    4  cp /usr/share/doc/httpd-2.4.6/httpd-vhosts.conf /etc/httpd/conf.d/simple.conf
+    5  cd /etc/httpd/conf.d/
+    6  vi simple.conf 
+    7  httpd -t
+    8  firewall-cmd --permanent --add-port=80/tcp
+    9  firewall-cmd --reload
+   10  systemctl restart httpd
+   11  firewall-cmd --list-all
+   12  #firewall-cmd --permanent --add-rich-rule=""
+   13  man firewall.richlanguage
+   14  man firewalld.richlanguage
+   15  firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="0.0.0.0/0" forward-port to-port="80" protocol="tcp" port="18080""
+   16  firewall-cmd --reload
+   17  firewall-cmd --permanent --add-port=18080/tcp
+   18  firewall-cmd --reload
+   19  man semanage port
+   20  semanage port -a -t http_port_t -p tcp 90
+   21  cp simple.conf port.conf
+   22  vi port.conf 
+   23  mkdir /data
+   24  rm -rvf /data
+   25  mkdir /dara
+   26  rm -rvf /dara/
+   27  mkdir /data
+   28  man semanage fcontext
+   29  semanage fcontext -a -t httpd_sys_content_t "/data(/.*)?"
+   30  restorecon -R -v /data
+   31  vi /data/index.html
+   32  vi port.conf 
+   33  httpd -t
+   34  semanage port -l | grep http
+   35  vi /etc/httpd/conf/httpd.conf
+   36  firewall-cmd --permanent --add-port=90/tcp
+   37  firewall-cmd --reload
+   38  systemctl restart httpd
+   39  yum install mod_ssl -y
+   40  ls
+   41  cp ssl.conf myssl.conf
+   42  cd
+   43  ls
+   44  cp server.crt /etc/pki/tls/certs/
+   45  cp server.csr /etc/pki/tls/certs/
+   46  cp server.key /etc/pki/tls/private/
+   47  cd -
+   48  vi myssl.conf 
+   49  httpd -t
+   50  firewall-cmd --permanent --add-port=443/tcp
+   51  firewall-cmd --reload 
+   52  mkdir /var/www/ssl
+   53  ls /var/www/ssl/
+   54  vi /var/www/ssl/index.html 
+   55  systemctl restart httpd
+   56  nmcli connection show 
+   57  nmcli connection delete Wired\ connection\ 1
+   58  nmcli connection delete Wired\ connection\ 2
+   59  #nmcli connection add type team con-name test ifname test config 
+   60  vi /usr/share/doc/teamd-1.27/example_configs/activebackup_arp_ping_1.conf 
+   61  nmcli connection add type team con-name test ifname test config '{"runner":       {"name": "activebackup"}}'
+   62  nmcli connection add type team-slave con-name ens37 ifname ens38 master test
+   63  nmcli connection delete ens37
+   64  nmcli connection add type team-slave con-name ens37 ifname ens37 master test
+   65  nmcli connection show
+   66  nmcli connection add type team-slave con-name ens38 ifname ens38 master test
+   67  nmcli connection modify test ipv4.addresses "192.168.46.160/24"
+   68  nmcli connection modify test ipv4.method static
+   69  nmcli connection up ens37
+   70  nmcli connection up ens38
+   71  nmcli connection uptest
+   72  nmcli connection up test
+   73  ip a
+   74  teamdctl test -help
+   75  teamdctl test state view
+   76  cd
+   77  rm -rvf /nfs
+   78  yum install nfs -y
+   79  yum install nfs-utils -y
+   80  chmod 777 /nfs
+   81  mkdir /nfs
+   82  chmod 777 /nfs
+   83  vi /etc/exports
+   84  exportfs -r
+   85  exportfs -a
+   86  exportfs -v
+   87  firewall-cmd --permanent --add-service=nfs
+   88  firewall-cmd --permanent --reload
+   89  firewall-cmd --reload 
+   90  systemctl restart nfs
+   91  systemctl enable nfs
+   92  systemctl enable httpd
+   93  touch /nfs/test
+   94  ls /nfs
+   95  yum install samba samba-client -y 
+   96  rm -rvf /samba/
+   97  mkdir /samba
+   98  ls
+   99  man semanage fcontext
+  100  semanage fcontext -a -t samba_share_t "/samba(/.*)?"
+  101  restorecon -R -v /samba/
+  102  vi /etc/samba/smb.conf
+  103  testparm -t
+  104  userdel -r user1
+  105  userdel -r user2
+  106  useradd user1
+  107  useradd user2
+  108  smbpasswd -a user1
+  109  smbpasswd -a user2
+  110  setfacl -m u:user1:rwx /samba
+  111  setfacl -m u:user2:r-x /samba
+  112  getfacl /samba/
+  113  yum whatprovides sebool
+  114  getsebool -a | grep samba
+  115  setsebool -P samba_export_all_rw on
+  116  setsebool -P samba_export_all_ro on
+  117  getsebool -a | grep samba
+  118  systemctl restart smb nmb
+  119  firewall-cmd --permanent --add-service=samba 
+  120  firewall-cmd --reload 
+  121  vi /etc/samba/smb.conf
+  122  mkdir /samba/test
+  123  ls
+  124  ls /samba/
+  125  ls
+  126  ls /samba/
+  127  lsblk
+  128  fdisk /dev/sdb 
+  129  partprobe
+  130  lsblk
+  131  vgcreate vg1 /dev/sdb6
+  132  vgs
+  133  lvcreate 100%FREE -n lv1 vg1
+  134  lvcreate -l 100%FREE -n lv1 vg1
+  135  lv
+  136  lvs
+  137  lsblk
+  138  yum install targetcli -y
+  139  targetcli 
+  140  systemctl enable smb nmb
+  141  systemctl status target
+  142  systemctl start target
+  143  targetcli 
+  144  systemctl restart target
+  145  systemctl enable target
+  146  firewall-cmd --permanent --add-service=samba
+  147  firewall-cmd --reload
+  148  firewall-cmd --list-all
+  149  firewall-cmd --permanent --add-port=3260/tcp
+  150  firewall-cmd --reload
+  151  history > master.history
